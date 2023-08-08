@@ -6,34 +6,34 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-public class ProductType {
+public class Brand {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "product_type_id")
-    private Integer productTypeId;
-    private String productTypeName;
+    @Column(name = "brand_id")
+    private Integer brandId;
+    private String brandName;
 
     @OneToMany(mappedBy = "brand")
     @JsonBackReference
     private Set<Product> productSet;
 
-    public ProductType() {
+    public Brand() {
     }
 
-    public Integer getProductTypeId() {
-        return productTypeId;
+    public Integer getBrandId() {
+        return brandId;
     }
 
-    public void setProductTypeId(Integer productTypeId) {
-        this.productTypeId = productTypeId;
+    public void setBrandId(Integer brandId) {
+        this.brandId = brandId;
     }
 
-    public String getProductTypeName() {
-        return productTypeName;
+    public String getBrandName() {
+        return brandName;
     }
 
-    public void setProductTypeName(String productTypeName) {
-        this.productTypeName = productTypeName;
+    public void setBrandName(String brandName) {
+        this.brandName = brandName;
     }
 
     public Set<Product> getProductSet() {

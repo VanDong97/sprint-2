@@ -1,48 +1,53 @@
 package com.example.be.model.user;
 
+import com.example.be.model.cart.Cart;
+import com.example.be.model.cart.PurchaseHistory;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
-@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Column(name = "user_name")
-    private String userName;
-    @Column(nullable = false)
+    @Column(name = "user_id")
+    private Integer userId;
+    @Column(name = "username",unique = true)
+    private String username;
+    @JsonIgnore
     private String password;
-    @JoinColumn(name = "role_id")
-    @ManyToOne
+
+    @OneToMany(mappedBy = "user")
     @JsonBackReference
-    private Role role;
+    private Set<UserRole> userRoleSet;
+
+    @OneToMany(mappedBy = "user")
+    @JsonBackReference
+    private Set<Cart> cartSet;
+
+    @OneToMany(mappedBy = "user")
+    @JsonBackReference
+    private Set<PurchaseHistory> purchaseHistorySet;
 
     public User() {
     }
 
-    public User(Long id, String userName, String password, Role role) {
-        this.id = id;
-        this.userName = userName;
-        this.password = password;
-        this.role = role;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public Long getId() {
-        return id;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public String getUsername() {
+        return username;
     }
 
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -53,11 +58,27 @@ public class User {
         this.password = password;
     }
 
-    public Role getRole() {
-        return role;
+    public Set<UserRole> getUserRoleSet() {
+        return userRoleSet;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setUserRoleSet(Set<UserRole> userRoleSet) {
+        this.userRoleSet = userRoleSet;
+    }
+
+    public Set<Cart> getCartSet() {
+        return cartSet;
+    }
+
+    public void setCartSet(Set<Cart> cartSet) {
+        this.cartSet = cartSet;
+    }
+
+    public Set<PurchaseHistory> getPurchaseHistorySet() {
+        return purchaseHistorySet;
+    }
+
+    public void setPurchaseHistorySet(Set<PurchaseHistory> purchaseHistorySet) {
+        this.purchaseHistorySet = purchaseHistorySet;
     }
 }
