@@ -1,7 +1,41 @@
 import {Link} from "react-router-dom";
-import React from "react";
+import React, {useEffect, useState} from "react";
+import * as productService from "../../service/productService";
+import {useParams} from "react-router";
+import {useDispatch} from "react-redux";
+import { Provider } from 'react-redux';
 
 export function ProductDetail() {
+    const [product1, setProduct1] = useState([]);
+    const [itemsToShow, setItemsToShow] = useState(8);
+    const [itemsPerLoad, setItemsPerLoad] = useState(4);
+    const [product, setProduct] = useState({});
+    const param = useParams();
+
+    useEffect(() => {
+        document.title = "Chi tiết sản phẩm"; // Thay đổi title
+    }, []);
+
+    useEffect(() => {
+        const showList = async () => {
+            const rs = await productService.findAllProduct();
+            setProduct1(rs)
+        }
+        showList()
+    }, []);
+
+    useEffect(() => {
+        const fetchApi = async () => {
+            const result1 = await productService.findProductById(param.id)
+            setProduct(result1)
+        }
+        fetchApi()
+    }, [param.id])
+
+    const handleLoadMore = () => {
+        setItemsToShow(prevItems => prevItems + itemsPerLoad);
+    };
+
     return (
         <>
             <div className="site mb-5 mt-5" id="page">
@@ -9,23 +43,17 @@ export function ProductDetail() {
                     <div className="row">
                         <div className="col-6 p-0">
                             <div className="">
-                                <img src="https://giaysihcm.com/wp-content/uploads/2016/12/af1-trang.jpg"
-                                     style={{width: "100%", height: "100%"}}/>
-                                {/*<SimpleSlider imgList={product?.productImgDTOS} />*/}
+                                <img src={product?.image} style={{width: "100%", height: "100%"}}/>
+
                             </div>
                         </div>
                         <div className="col-6">
                             <h1 style={{fontSize: "24px", color: "#12ac4c"}}>
-                                Giày Nike Air TR
-                                {/*{product?.name}*/}
+                                {product?.productName}
                             </h1>
                             <p className="price fs-3">
                                 <b>
-                                    1.200.000 VND
-                                    {/*{product?.price.toLocaleString("vi-VN", {*/}
-                                    {/*    style: "currency",*/}
-                                    {/*    currency: "VND",*/}
-                                    {/*})}*/}
+                                    {(+product?.price).toLocaleString()} VND
                                     <b className="text-muted ml-2">
                                         <del>2.100.000 VND</del>
                                     </b>
@@ -39,48 +67,10 @@ export function ProductDetail() {
                                     <b>Kho hàng :</b> Còn hàng
                                 </p>
                                 <hr/>
-                                <div className="form-group required product-option-radio push-option">
-                                    <label className="control-label">
-                                        Chọn size
-                                    </label>
-                                    <div id="input-option3451" className="radio-horizontal"
-                                         style={{display: "flex", flexDirection: "row"}}>
-                                        <div className="radio">
-                                            <label style={{marginRight: "20px"}}>
-                                                <input type="radio" name="radio"/>
-                                                <span className="option-value">40</span>
-                                            </label>
-                                        </div>
-                                        <div className="radio">
-                                            <label style={{marginRight: "20px"}}>
-                                                <input type="radio" name="radio"/>
-                                                <span className="option-value">41</span>
-                                            </label>
-                                        </div>
-                                        <div className="radio">
-                                            <label style={{marginRight: "20px"}}>
-                                                <input type="radio" name="radio"/>
-                                                <span className="option-value">42</span>
-                                            </label>
-                                        </div>
-                                        <div className="radio">
-                                            <label style={{marginRight: "20px"}}>
-                                                <input type="radio" name="radio"/>
-                                                <span className="option-value">42.5</span>
-                                            </label>
-                                        </div>
-                                        <div className="radio ">
-                                            <label style={{marginRight: "20px"}}>
-                                                <input type="radio" name="radio"/>
-                                                <span className="option-value ">43</span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
                                 <div
-                                    // dangerouslySetInnerHTML={{ __html: product?.description }}
+                                    dangerouslySetInnerHTML={{ __html: product?.description }}
                                 ></div>
-                                <div className="d-flex align-items-center mb-3 gap-2">
+                                <div className="d-flex align-items-center mb-3 gap-2 mt-4">
                                     <input
                                         type="number"
                                         className="form-control"
@@ -101,6 +91,10 @@ export function ProductDetail() {
                                         className="btn btn-danger rounded-pill">
                                         Mua ngay
                                     </button>
+                                    <Link to="/"
+                                        className="btn btn-success rounded-pill">
+                                        Quay lại
+                                    </Link>
                                 </div>
                                 <div
                                     className="d-flex align-items-center bg-light mb-4"
@@ -125,6 +119,54 @@ export function ProductDetail() {
                         </div>
                     </div>
                 </div>
+            </div>
+            <div>
+                <div className="row px-xl-5">
+                    <h4 className="section-title position-relative  mx-xl-5 mb-4">
+                        <span className="bg-secondary pr-3">Sản phẩm liên quan</span>
+                    </h4>
+                    {product1?.slice(0, itemsToShow)?.map((value, index) => (
+                        <div className="col-lg-3 col-md-4 col-sm-6 pb-1">
+                            <div className="product-item bg-light mb-4">
+                                <div className="product-img position-relative overflow-hidden">
+                                    <img className="img-fluid w-100"
+                                         alt="" src={value.image}/>
+                                    <div className="product-action">
+                                        <a className="btn btn-outline-dark btn-square">
+                                            <i className="bi bi-cart4"></i>
+                                        </a>
+                                        <a className="btn btn-outline-dark btn-square" >
+                                            <Link to={`/detail/${value.productId}`}>
+                                                <i
+                                                    className="bi bi-info-square"
+                                                />
+                                            </Link>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div className="text-center py-4">
+                                    <a className="h6 text-decoration-none text-truncate" href="">
+                                        {value.productName}
+                                    </a>
+                                    <div className="d-flex align-items-center justify-content-center mt-2">
+                                        <h5>{(+value?.price).toLocaleString()} VND</h5>
+                                        <h6 className="text-muted ml-2">
+                                            <del style={{color : "red"}}>2.100.000 VND</del>
+                                        </h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                {itemsToShow < product1.length && (
+                    <div className="text-center mt-1 mb-5">
+                        <button style={{ width: "200px" ,backgroundColor: "#faebd7"}}  onClick={handleLoadMore}>
+                            Xem thêm
+                        </button>
+                    </div>
+                )}
             </div>
         </>
     );

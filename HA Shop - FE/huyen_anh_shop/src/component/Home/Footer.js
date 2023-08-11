@@ -15,7 +15,7 @@ function Footer() {
                                     <h5 className="widget-title">THÔNG TIN LIÊN HỆ</h5>
                                     <div className="textwidget">
                                         <p>
-                                            Cửa hàng trực tuyến 123 Ngô Quyền, Hải lăng - Quảng.
+                                            Cửa hàng trực tuyến 123 Ngô Quyền, Hải lăng - Quảng Trị.
                                             <br />
                                             <strong>Hotline: </strong>
                                             <span>090.371.1155</span>
@@ -23,7 +23,7 @@ function Footer() {
                                             <strong>Email: </strong>
                                             <span>huyenanhshop@gmail.com</span>
                                             <br />
-                                            <strong>Địa chỉ: </strong>
+                                            <strong>Địa chỉ: 261 Hoàng Văn Thụ, Phường 2, Quận Tân Bình, TPHCM.</strong>
 
                                         </p>
                                     </div>
@@ -42,9 +42,9 @@ function Footer() {
                                             id="menu-our-services"
                                             className="menu rt-mega-menu-transition-slide"
                                         >
-                                            <li className="menu-item">
+                                            <li className="">
                                                 <i
-                                                    className="bi bi-caret-right-fill pe-3 text-white"
+                                                    className=" pe-3 text-white"
                                                     style={{ fontSize: "12px" }}
                                                 ></i>
                                                 <a
@@ -58,7 +58,7 @@ function Footer() {
                                             </li>
                                             <li className="menu-item">
                                                 <i
-                                                    className="bi bi-caret-right-fill pe-3 text-white"
+                                                    className=" pe-3 text-white"
                                                     style={{ fontSize: "12px" }}
                                                 ></i>
                                                 <a
@@ -72,7 +72,7 @@ function Footer() {
                                             </li>
                                             <li className="menu-item">
                                                 <i
-                                                    className="bi bi-caret-right-fill pe-3 text-white"
+                                                    className=" pe-3 text-white"
                                                     style={{ fontSize: "12px" }}
                                                 ></i>
                                                 <a
@@ -86,7 +86,7 @@ function Footer() {
                                             </li>
                                             <li className="menu-item">
                                                 <i
-                                                    className="bi bi-caret-right-fill pe-3 text-white"
+                                                    className=" pe-3 text-white"
                                                     style={{ fontSize: "12px" }}
                                                 ></i>
                                                 <a

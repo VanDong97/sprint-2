@@ -1,8 +1,29 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import "../Home/home.css";
 import {Link} from "react-router-dom";
+import * as productService from "../../service/productService";
+import {useParams} from "react-router";
+import {Modal} from "reactstrap";
 
 export function Home() {
+
+    const [product, setProduct] = useState([]);
+    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [itemsToShow, setItemsToShow] = useState(8); // Số sản phẩm hiển thị ban đầu
+
+    useEffect(() => {
+        const showList = async () => {
+            const rs = await productService.findAllProduct();
+            setProduct(rs)
+        }
+        showList()
+    }, []);
+
+    useEffect(() => {
+        document.title = "Trang chủ"; // Thay đổi title
+    }, []);
+
+
     return (
         <>
             <div id="carouselExampleIndicators" className="carousel slide">
@@ -34,22 +55,22 @@ export function Home() {
                         aria-label="Slide 4"
                     />
                 </div>
-                <div className="carousel-inner" style={{height: "700px"}}>
+                <div className="carousel-inner" >
                     <div className="carousel-item active">
-                        <img src="https://a.ipricegroup.com/media/Jub/giay-jordan-1-co-thap-nu-hong.jpg"
+                        <img src="https://glab.vn/storage/uploads/advert/6448f45698c3e.jpg"
                              className="d-block w-100" alt="..."/>
                     </div>
                     <div className="carousel-item">
                         <img
-                            src="https://giaysneaker.store/media/magefan_blog/nike-air-force-1-low-sach-se-nay-co-cac-dau-mut-ma-crom-tren-cac-moc-treo-nghieng-cua-no.jpg"
+                            src="https://cdn-img.thethao247.vn/upload/thanhtung/2020/02/05/best-selling-shoes-2019-2.jpg"
                             className="d-block w-100" alt="..."/>
                     </div>
                     <div className="carousel-item">
-                        <img src="https://i.ebayimg.com/images/g/JLIAAOSwFR9jITlE/s-l1600.jpg" className="d-block w-100"
+                        <img src="https://glab.vn/storage/uploads/advert/6448f45698c3e.jpg" className="d-block w-100"
                              alt="..."/>
                     </div>
                     <div className="carousel-item">
-                        <img src="https://i.ebayimg.com/images/g/T-IAAOSwwwtkJmaT/s-l1600.jpg" className="d-block w-100"
+                        <img src="https://cdn-img.thethao247.vn/upload/thanhtung/2020/02/05/best-selling-shoes-2019-2.jpg" className="d-block w-100"
                              alt="..."/>
                     </div>
                 </div>
@@ -136,357 +157,44 @@ export function Home() {
 
             <div className="container-fluid pt-5 pb-3">
                 <h2 className="section-title position-relative text-uppercase mx-xl-5 mb-4">
-                    <span className="bg-secondary pr-3">Sản Phẩm Nổi Bật</span>
-                </h2>
-                <div className="row px-xl-5">
-                    <div className="col-lg-3 col-md-4 col-sm-6 pb-1">
-                        <div className="product-item bg-light mb-4">
-                            <div className="product-img position-relative overflow-hidden">
-                                <img className="img-fluid w-100"
-                                     src="https://hotgirlshop.com/Uploads/Products/21072021/News/20721610-giay-the-thao-nu-nike-cao-cap-chinh-hang.jpg"
-                                     alt=""/>
-                                <div className="product-action">
-                                    <a className="btn btn-outline-dark btn-square" href="">
-                                        <i className="bi bi-cart4"></i>
-                                    </a>
-                                    <a className="btn btn-outline-dark btn-square" href="">
-                                        <i className="bi bi-info-square"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <div className="text-center py-4">
-                                <a className="h6 text-decoration-none text-truncate" href="">
-                                    Giày chạy bộ cho nam
-                                </a>
-                                <div className="d-flex align-items-center justify-content-center mt-2">
-                                    <h5>700.000 VND</h5>
-                                    <h6 className="text-muted ml-2">
-                                        <del>1.400.000 VND</del>
-                                    </h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-lg-3 col-md-4 col-sm-6 pb-1">
-                        <div className="product-item bg-light mb-4">
-                            <div className="product-img position-relative overflow-hidden">
-                                <img className="img-fluid w-100"
-                                     src="https://anchuongshoes.com/image/cache/catalog/Nike/Giay%20Nike%20Jordan%204%20Den%20Trang-800x800.jpg"
-                                     alt=""/>
-                                <div className="product-action">
-                                    <a className="btn btn-outline-dark btn-square" href="">
-                                        <i className="bi bi-cart4"></i>
-                                    </a>
-                                    <a className="btn btn-outline-dark btn-square" href="">
-                                        <i className="bi bi-info-square"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <div className="text-center py-4">
-                                <a className="h6 text-decoration-none text-truncate" href="">
-                                    Giày cá tính cho nam
-                                </a>
-                                <div className="d-flex align-items-center justify-content-center mt-2">
-                                    <h5>900.000 VND</h5>
-                                    <h6 className="text-muted ml-2">
-                                        <del>1.500.000 VND</del>
-                                    </h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-lg-3 col-md-4 col-sm-6 pb-1">
-                        <div className="product-item bg-light mb-4">
-                            <div className="product-img position-relative overflow-hidden">
-                                <img className="img-fluid w-100"
-                                     src="https://n2k.vn/wp-content/uploads/2022/09/HMR00688-scaled.jpg"
-                                     alt=""/>
-                                <div className="product-action">
-                                    <a className="btn btn-outline-dark btn-square" href="">
-                                        <i className="bi bi-cart4"></i>
-                                    </a>
-                                    <a className="btn btn-outline-dark btn-square" href="">
-                                        <i className="bi bi-info-square"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <div className="text-center py-4">
-                                <a className="h6 text-decoration-none text-truncate" href="">
-                                    Giày cá tính cho nữ
-                                </a>
-                                <div className="d-flex align-items-center justify-content-center mt-2">
-                                    <h5>800.000 VND</h5>
-                                    <h6 className="text-muted ml-2">
-                                        <del>1.300.000 VND</del>
-                                    </h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-lg-3 col-md-4 col-sm-6 pb-1">
-                        <div className="product-item bg-light mb-4">
-                            <div className="product-img position-relative overflow-hidden">
-                                <img className="img-fluid w-100"
-                                     src="https://lzd-img-global.slatic.net/g/p/991e34a7dd3af44899a8d33f2ffed4d9.jpg_240x240q80.jpg_.webp"
-                                     alt=""/>
-                                <div className="product-action">
-                                    <a className="btn btn-outline-dark btn-square" href="">
-                                        <i className="bi bi-cart4"></i>
-                                    </a>
-                                    <a className="btn btn-outline-dark btn-square" href="">
-                                        <i className="bi bi-info-square"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <div className="text-center py-4">
-                                <a className="h6 text-decoration-none text-truncate" href="">
-                                    Giày đẹp cho nữ
-                                </a>
-                                <div className="d-flex align-items-center justify-content-center mt-2">
-                                    <h5>1.200.000 VND</h5>
-                                    <h6 className="text-muted ml-2">
-                                        <del>1.600.000 VND</del>
-                                    </h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div className="container-fluid pt-5 pb-3">
-                <h2 className="section-title position-relative text-uppercase mx-xl-5 mb-4">
                     <span className="bg-secondary pr-3">Sản Phẩm</span>
                 </h2>
                 <div className="row px-xl-5">
-                    <div className="col-lg-3 col-md-4 col-sm-6 pb-1">
-                        <div className="product-item bg-light mb-4">
-                            <div className="product-img position-relative overflow-hidden">
-                                <img className="img-fluid w-100"
-                                     src="https://misskick.vn/wp-content/uploads/2023/02/x-dong-san-pham-giay-nike-duoc-ua-chuong-nhat-1.jpg"
-                                     alt=""/>
-                                <div className="product-action">
-                                    <a className="btn btn-outline-dark btn-square" href="">
-                                        <i className="bi bi-cart4"></i>
-                                    </a>
-                                    <a className="btn btn-outline-dark btn-square" href="">
-                                        <i className="bi bi-info-square"></i>
-                                    </a>
+                    {product.map((value, index) => (
+                        <div className="col-lg-3 col-md-4 col-sm-6 pb-1">
+                            <div className="product-item bg-light mb-4">
+                                <div className="product-img position-relative overflow-hidden">
+                                    <img className="img-fluid w-100"
+                                         alt="" src={value.image}/>
+                                    <div className="product-action">
+                                        <a className="btn btn-outline-dark btn-square">
+                                            <i className="bi bi-cart4"></i>
+                                        </a>
+                                        <a className="btn btn-outline-dark btn-square" >
+                                            <Link to={`/detail/${value.productId}`}>
+                                                <i
+                                                    className="bi bi-info-square"
+                                                />
+                                            </Link>
+                                        </a>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="text-center py-4">
-                                <a className="h6 text-decoration-none text-truncate" href="">
-                                    Giày Nike Cortez
-                                </a>
-                                <div className="d-flex align-items-center justify-content-center mt-2">
-                                    <h5>1.500.000 VND</h5>
-                                    <h6 className="text-muted ml-2">
-                                        <del>2.100.000 VND</del>
-                                    </h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-lg-3 col-md-4 col-sm-6 pb-1">
-                        <div className="product-item bg-light mb-4">
-                            <div className="product-img position-relative overflow-hidden">
-                                <img className="img-fluid w-100"
-                                     src="https://misskick.vn/wp-content/uploads/2023/02/x-dong-san-pham-giay-nike-duoc-ua-chuong-nhat-2.jpg"
-                                     alt=""/>
-                                <div className="product-action">
-                                    <a className="btn btn-outline-dark btn-square" href="">
-                                        <i className="bi bi-cart4"></i>
+                                <div className="text-center py-4">
+                                    <a className="h6 text-decoration-none text-truncate" href="">
+                                        {value.productName}
                                     </a>
-                                    <a className="btn btn-outline-dark btn-square" href="">
-                                        <i className="bi bi-info-square"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <div className="text-center py-4">
-                                <a className="h6 text-decoration-none text-truncate" href="">
-                                    Giày Nike Epic React
-                                </a>
-                                <div className="d-flex align-items-center justify-content-center mt-2">
-                                    <h5>1.000.000 VND</h5>
-                                    <h6 className="text-muted ml-2">
-                                        <del>1.500.000 VND</del>
-                                    </h6>
+                                    <div className="d-flex align-items-center justify-content-center mt-2">
+                                        <h5>{(+value?.price).toLocaleString()} VND</h5>
+                                        <h6 className="text-muted ml-2">
+                                            <del style={{color : "red"}}>2.100.000 VND</del>
+                                        </h6>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="col-lg-3 col-md-4 col-sm-6 pb-1">
-                        <div className="product-item bg-light mb-4">
-                            <div className="product-img position-relative overflow-hidden">
-                                <img className="img-fluid w-100"
-                                     src="https://misskick.vn/wp-content/uploads/2023/02/x-dong-san-pham-giay-nike-duoc-ua-chuong-nhat-3.jpg"
-                                     alt=""/>
-                                <div className="product-action">
-                                    <a className="btn btn-outline-dark btn-square" href="">
-                                        <i className="bi bi-cart4"></i>
-                                    </a>
-                                    <a className="btn btn-outline-dark btn-square" href="">
-                                        <i className="bi bi-info-square"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <div className="text-center py-4">
-                                <a className="h6 text-decoration-none text-truncate" href="">
-                                    Giày Nike Air Max
-                                </a>
-                                <div className="d-flex align-items-center justify-content-center mt-2">
-                                    <h5>1.200.000 VND</h5>
-                                    <h6 className="text-muted ml-2">
-                                        <del>1.600.000 VND</del>
-                                    </h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-lg-3 col-md-4 col-sm-6 pb-1">
-                        <div className="product-item bg-light mb-4">
-                            <div className="product-img position-relative overflow-hidden">
-                                <img className="img-fluid w-100"
-                                     src="https://misskick.vn/wp-content/uploads/2023/02/x-dong-san-pham-giay-nike-duoc-ua-chuong-nhat-4.jpg"
-                                     alt=""/>
-                                <div className="product-action">
-                                    <a className="btn btn-outline-dark btn-square" href="">
-                                        <i className="bi bi-cart4"></i>
-                                    </a>
-                                    <a className="btn btn-outline-dark btn-square" href="">
-                                        <i className="bi bi-info-square"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <div className="text-center py-4">
-                                <a className="h6 text-decoration-none text-truncate" href="">
-                                    Giày Nike Air Force
-                                </a>
-                                <div className="d-flex align-items-center justify-content-center mt-2">
-                                    <h5>1.800.000 VND</h5>
-                                    <h6 className="text-muted ml-2">
-                                        <del>2.100.000 VND</del>
-                                    </h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-lg-3 col-md-4 col-sm-6 pb-1">
-                        <div className="product-item bg-light mb-4">
-                            <div className="product-img position-relative overflow-hidden">
-                                <img className="img-fluid w-100"
-                                     src="https://misskick.vn/wp-content/uploads/2023/02/x-dong-san-pham-giay-nike-duoc-ua-chuong-nhat-5.jpg"
-                                     alt=""/>
-                                <div className="product-action">
-                                    <a className="btn btn-outline-dark btn-square" href="">
-                                        <i className="bi bi-cart4"></i>
-                                    </a>
-                                    <a className="btn btn-outline-dark btn-square" href="">
-                                        <i className="bi bi-info-square"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <div className="text-center py-4">
-                                <a className="h6 text-decoration-none text-truncate" href="">
-                                    Giày Nike Jordan
-                                </a>
-                                <div className="d-flex align-items-center justify-content-center mt-2">
-                                    <h5>800.000 VND</h5>
-                                    <h6 className="text-muted ml-2">
-                                        <del>1.200.000 VND</del>
-                                    </h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-lg-3 col-md-4 col-sm-6 pb-1">
-                        <div className="product-item bg-light mb-4">
-                            <div className="product-img position-relative overflow-hidden">
-                                <img className="img-fluid w-100"
-                                     src="https://misskick.vn/wp-content/uploads/2023/02/x-dong-san-pham-giay-nike-duoc-ua-chuong-nhat-6.jpg"
-                                     alt=""/>
-                                <div className="product-action">
-                                    <a className="btn btn-outline-dark btn-square" href="">
-                                        <i className="bi bi-cart4"></i>
-                                    </a>
-                                    <a className="btn btn-outline-dark btn-square" href="">
-                                        <i className="bi bi-info-square"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <div className="text-center py-4">
-                                <a className="h6 text-decoration-none text-truncate" href="">
-                                    Giày Nike Hyperadapt
-                                </a>
-                                <div className="d-flex align-items-center justify-content-center mt-2">
-                                    <h5>1.300.000 VND</h5>
-                                    <h6 className="text-muted ml-2">
-                                        <del>1.700.000 VND</del>
-                                    </h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-lg-3 col-md-4 col-sm-6 pb-1">
-                        <div className="product-item bg-light mb-4">
-                            <div className="product-img position-relative overflow-hidden">
-                                <img className="img-fluid w-100"
-                                     src="https://misskick.vn/wp-content/uploads/2023/02/x-dong-san-pham-giay-nike-duoc-ua-chuong-nhat-5.jpg"
-                                     alt=""/>
-                                <div className="product-action">
-                                    <a className="btn btn-outline-dark btn-square" href="">
-                                        <i className="bi bi-cart4"></i>
-                                    </a>
-                                    <a className="btn btn-outline-dark btn-square" href="">
-                                        <i className="bi bi-info-square"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <div className="text-center py-4">
-                                <a className="h6 text-decoration-none text-truncate" href="">
-                                    Giày Nike Zoom
-                                </a>
-                                <div className="d-flex align-items-center justify-content-center mt-2">
-                                    <h5>900.000 VND</h5>
-                                    <h6 className="text-muted ml-2">
-                                        <del>1.300.000 VND</del>
-                                    </h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-lg-3 col-md-4 col-sm-6 pb-1">
-                        <div className="product-item bg-light mb-4">
-                            <div className="product-img position-relative overflow-hidden">
-                                <img className="img-fluid w-100"
-                                     src="https://misskick.vn/wp-content/uploads/2023/02/x-dong-san-pham-giay-nike-duoc-ua-chuong-nhat-8.jpeg"
-                                     alt=""/>
-                                <div className="product-action">
-                                    <a className="btn btn-outline-dark btn-square" href="">
-                                        <i className="bi bi-cart4"></i>
-                                    </a>
-                                    <a className="btn btn-outline-dark btn-square" href="">
-                                        <i className="bi bi-info-square"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <div className="text-center py-4">
-                                <a className="h6 text-decoration-none text-truncate" href="">
-                                    Giày Nike Air TR
-                                </a>
-                                <div className="d-flex align-items-center justify-content-center mt-2">
-                                    <h5>800.000 VND</h5>
-                                    <h6 className="text-muted ml-2">
-                                        <del>1.200.000 VND</del>
-                                    </h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    ))}
                 </div>
             </div>
-
-
             <div className="container-fluid pt-5 pb-3">
                 <div className="row px-xl-5">
                     <div className="col-md-6">
