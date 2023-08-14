@@ -1,9 +1,12 @@
 import {Link} from "react-router-dom";
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import * as productService from "../../service/productService";
-import {useParams} from "react-router";
-import {useDispatch} from "react-redux";
-import { Provider } from 'react-redux';
+import {useNavigate, useParams} from "react-router";
+import {QuantityContext} from "../ShoppingCart/QuantityContext";
+import * as UserService from "../../service/userService";
+import Swal from "sweetalert2";
+import axios from "axios";
+
 
 export function ProductDetail() {
     const [product1, setProduct1] = useState([]);
@@ -11,6 +14,11 @@ export function ProductDetail() {
     const [itemsPerLoad, setItemsPerLoad] = useState(4);
     const [product, setProduct] = useState({});
     const param = useParams();
+    const { iconQuantity, setIconQuantity } = useContext(QuantityContext)
+    const [userId, setUserId] = useState(0);
+    const username = sessionStorage.getItem('USERNAME');
+    const [amount, setAmount] = useState(1);
+    const navigate = useNavigate();
 
     useEffect(() => {
         document.title = "Chi tiết sản phẩm"; // Thay đổi title
@@ -34,6 +42,44 @@ export function ProductDetail() {
 
     const handleLoadMore = () => {
         setItemsToShow(prevItems => prevItems + itemsPerLoad);
+    };
+    useEffect(() => {
+        const getUserName = async () => {
+            const rs = await UserService.findUserName(username);
+            setUserId(rs)
+        }
+        getUserName();
+    }, []);
+
+    const addToCart1 = (productId, item) => {
+        if (!username) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Đăng nhập để xem giỏ hàng',
+                showConfirmButton: false,
+                timer: 1500
+            });
+            navigate('/login')
+        }else{
+            const apiUrl = `http://localhost:8080/api/cart/addToCart/${userId}/${productId}/${amount}`;
+            setIconQuantity(iconQuantity + 1)
+            axios.get(apiUrl)
+                .then(response => {
+                    Swal.fire({
+                        text: 'Thêm vào giỏ hàng thành công!',
+                        icon: 'success',
+                        confirmButtonText: 'OK',
+                        timer : 1500,
+                    })
+                })
+                .catch(error => {
+                    console.error('Lỗi khi thêm vào giỏ hàng :', error.response);
+                });
+        };
+    }
+
+    const handleAddToCartClick = (productId) => {
+        addToCart1(productId);
     };
 
     return (
@@ -76,21 +122,12 @@ export function ProductDetail() {
                                         className="form-control"
                                         style={{width: 70}}
                                         min={0}
-                                        // value={quantity}
-                                        // onChange={(e) => handleChangeQuantity(e)}
                                     />
-                                    <button
+                                    <a onClick={() => handleAddToCartClick(product.productId)}
                                         className="btn btn-success rounded-pill"
-                                        // onClick={() =>
-                                        //     handleAddCartDetail(product?.id, product?.price)
-                                        // }
                                     >
                                         Thêm vào giỏ hàng
-                                    </button>
-                                    <button
-                                        className="btn btn-danger rounded-pill">
-                                        Mua ngay
-                                    </button>
+                                    </a>
                                     <Link to="/"
                                         className="btn btn-success rounded-pill">
                                         Quay lại
@@ -132,7 +169,7 @@ export function ProductDetail() {
                                     <img className="img-fluid w-100"
                                          alt="" src={value.image}/>
                                     <div className="product-action">
-                                        <a className="btn btn-outline-dark btn-square">
+                                        <a className="btn btn-outline-dark btn-square" onClick={() => handleAddToCartClick(product.productId)}>
                                             <i className="bi bi-cart4"></i>
                                         </a>
                                         <a className="btn btn-outline-dark btn-square" >
@@ -161,10 +198,10 @@ export function ProductDetail() {
                 </div>
 
                 {itemsToShow < product1.length && (
-                    <div className="text-center mt-1 mb-5">
-                        <button style={{ width: "200px" ,backgroundColor: "#faebd7"}}  onClick={handleLoadMore}>
+                    <div className="text-center mt-3 mb-4">
+                        <div className="btn btn-outline" style={{ width: "200px"}}  onClick={handleLoadMore}>
                             Xem thêm
-                        </button>
+                        </div>
                     </div>
                 )}
             </div>

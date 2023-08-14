@@ -5,6 +5,7 @@ import {useNavigate, useParams} from "react-router";
 import * as UserService from "../../service/userService";
 import * as CartService from "../../service/cartService";
 import * as productService from "../../service/productService";
+import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 
 export function ShoppingCart() {
 
@@ -13,9 +14,9 @@ export function ShoppingCart() {
     const username = sessionStorage.getItem('USERNAME');
     const navigate = useNavigate();
     const param = useParams();
-    const ship = 30; // Assuming it's a constant
     const [product, setProduct] = useState([]);
     const [productQuantities, setProductQuantities] = useState({});
+
 
     useEffect(() => {
         document.title = "Giỏ hàng"; // Thay đổi title
@@ -75,32 +76,43 @@ export function ShoppingCart() {
     }, []);
     console.log(cart);
 
-    if (!sessionStorage.getItem("roles")) {
+    // if (!sessionStorage.getItem("roles")) {
+    //
+    //     Swal.fire({
+    //         title: 'Thông báo!',
+    //         text: `Đăng nhập để xem giỏ hàng`,
+    //         icon: 'error',
+    //         confirmButtonText: 'OK',
+    //     });
+    //     navigate("/login")
+    //     return null
+    //
+    // }
 
+    const deleteCartDetail = (image,cartId, productId, productName, cartDetailId) => {
         Swal.fire({
-            title: 'Thông báo!',
-            text: `Bạn phải đăng nhập để xem giỏ hàng`,
-            icon: 'error',
-            confirmButtonText: 'OK',
-        });
-        navigate("/login")
-        return null
+            imageUrl : image,
+            imageWidth: 400,
+            imageHeight: 300,
+            text: "Bạn có muốn xóa sản phẩm này không ?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Xóa',
+            cancelButtonText : "Không"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                CartService.deleteCartDetail(cartId, productId).then(() => {
+                    setCart((prevCart) => prevCart.filter((item) => item.cartDetailId !== cartDetailId));
+                });
+                Swal.fire({
+                    icon : 'success',
+                    text : 'Xóa thành công !'
+                })
+            }
+        })
 
-    }
-
-    const deleteCartDetail = (cartId, productId, productName, cartDetailId) => {
-        // Call the API to delete the cart detail
-        CartService.deleteCartDetail(cartId, productId).then(() => {
-            // Update the cart state to remove the deleted item
-            setCart((prevCart) => prevCart.filter((item) => item.cartDetailId !== cartDetailId));
-
-            Swal.fire({
-                title: 'Thông báo!',
-                text: `Bạn vừa xoá mặt hàng ${productName}`,
-                icon: 'success',
-                confirmButtonText: 'OK',
-            });
-        });
     };
     return (
         <>
@@ -133,8 +145,6 @@ export function ShoppingCart() {
                                 {cart?.map((item , index) =>(
                                     <tr>
                                         <td className="align-middle" key={index}>
-                                            {/*<img src="https://misskick.vn/wp-content/uploads/2023/02/x-dong-san-pham-giay-nike-duoc-ua-chuong-nhat-3.jpg" alt="" style={{ width: 50 }} />{" "}*/}
-                                            {/*Giày Nike Air Max*/}
                                             <img style={{width: 50}} src={item?.image}/>
                                             {item.productName}
                                         </td>
@@ -158,7 +168,7 @@ export function ShoppingCart() {
                                                     type="text"
                                                     className="form-control form-control-sm bg-secondary border-0 text-center"
                                                     defaultValue={item.amount}
-                                                    value={productQuantities[item.productId] || 1}
+                                                    value={productQuantities[item.productId]}
                                                 />
                                                 <div className="input-group-btn">
                                                     <button className="btn btn-sm btn-primary btn-plus" onClick={() => increaseQuantity(item.productId)}>
@@ -171,7 +181,7 @@ export function ShoppingCart() {
                                             {Intl.NumberFormat().format(item.price * (productQuantities[item.productId] || item.amount))} VND
                                         </td>
                                         <td className="align-middle">
-                                            <a onClick={() => deleteCartDetail(item.cartId, item.productId, item.productName, item.cartDetailId)} className="btn btn-sm btn-danger">
+                                            <a onClick={() => deleteCartDetail(item?.image,item.cartId, item.productId, item.productName, item.cartDetailId)} className="btn btn-sm btn-danger">
                                                 <i className="bi bi-x-circle"></i>
                                             </a>
                                         </td>
@@ -201,9 +211,39 @@ export function ShoppingCart() {
                                     <h5>Tổng Tiền</h5>
                                     <h5>{calculateTotalSum().toLocaleString()} VND</h5>
                                 </div>
-                                <button className="btn btn-block btn-primary font-weight-bold my-3 py-3">
-                                    Thanh Toán
-                                </button>
+                                <PayPalScriptProvider>
+                                    <PayPalButtons
+                                        createOrder={(data, actions) => {
+                                            return actions.order.create({
+                                                purchase_units: [
+                                                    {
+                                                        amount: {
+                                                            value: calculateTotalSum(),
+                                                        },
+                                                    },
+                                                ],
+                                            });
+                                        }}
+                                        onApprove={(data, actions) => {
+                                            return actions.order.capture().then(function () {
+                                                Swal.fire({
+                                                    icon: 'success',
+                                                    title: 'Thanh toán thành công',
+                                                    showConfirmButton: false,
+                                                    timer: 1000,
+                                                });
+                                                navigate('/history')
+                                                const totalAmount = calculateTotalSum() + 30000;
+                                                CartService.saveHistory(userId, totalAmount).then(() => {
+                                                    // Clear the cart after successful payment and saving the history
+                                                    CartService.setCart(userId).then((updatedCartData) => {
+                                                        setCart(updatedCartData);
+                                                    });
+                                                });
+                                            });
+                                        }}
+                                    />
+                                </PayPalScriptProvider>
                             </div>
                         </div>
                     </div>

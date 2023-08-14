@@ -9,6 +9,9 @@ import {ProductDetail} from "./component/ProductDetail/ProductDetail";
 import {ShoppingCart} from "./component/ShoppingCart/ShoppingCart";
 import {QuantityProvider} from "./component/ShoppingCart/QuantityContext";
 import {Shop} from "./component/ShoppingCart/Shop";
+import {Employee} from "./component/Home/employee";
+import {History} from "./component/ShoppingCart/History";
+import {Promotion} from "./component/Home/Promotion";
 
 function App() {
   return (
@@ -21,6 +24,9 @@ function App() {
               <Route path="/detail/:id" element={<ProductDetail />} />
               <Route path="/cart/:username" element={<ShoppingCart />} />
               <Route path='/shop' element={<Shop />} />
+              <Route path='/employee' element={<Employee />} />
+              <Route path='/history' element={<History />} />
+              <Route path='/promotion' element={<Promotion />} />
           </Routes>
           <Footer />
           </QuantityProvider>

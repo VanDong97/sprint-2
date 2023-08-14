@@ -57,6 +57,7 @@ export const findAllHistory = async (userId) => {
     }
 };
 
+
 export const saveHistory = async (userId, total) => {
     try {
         const response = await axios.get(`http://localhost:8080/api/cart/save/${userId}/${total}`);

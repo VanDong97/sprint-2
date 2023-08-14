@@ -1,15 +1,23 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import "../Home/home.css";
 import {Link} from "react-router-dom";
+import {useNavigate, useParams} from "react-router";
+import {QuantityContext} from "../ShoppingCart/QuantityContext";
+import * as Swal from "sweetalert2";
+import axios from "axios";
 import * as productService from "../../service/productService";
-import {useParams} from "react-router";
-import {Modal} from "reactstrap";
+import * as UserService from "../../service/userService";
+
 
 export function Home() {
-
     const [product, setProduct] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [itemsToShow, setItemsToShow] = useState(8); // Số sản phẩm hiển thị ban đầu
+    const { iconQuantity, setIconQuantity } = useContext(QuantityContext)
+    const [userId, setUserId] = useState(0);
+    const username = sessionStorage.getItem('USERNAME');
+    const [amount, setAmount] = useState(1);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const showList = async () => {
@@ -23,7 +31,44 @@ export function Home() {
         document.title = "Trang chủ"; // Thay đổi title
     }, []);
 
+    useEffect(() => {
+        const getUserName = async () => {
+            const rs = await UserService.findUserName(username);
+            setUserId(rs)
+        }
+        getUserName();
+    }, []);
 
+    const addToCart1 = (productId, item) => {
+        if (!username) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Đăng nhập để xem giỏ hàng',
+                showConfirmButton: false,
+                timer: 1500
+            });
+            navigate('/api/login')
+        }else{
+            const apiUrl = `http://localhost:8080/api/cart/addToCart/${userId}/${productId}/${amount}`;
+            setIconQuantity(iconQuantity + 1)
+            axios.get(apiUrl)
+                .then(response => {
+                    Swal.fire({
+                        text: 'Thêm vào giỏ hàng thành công!',
+                        icon: 'success',
+                        confirmButtonText: 'OK',
+                        timer : 1500,
+                    })
+                })
+                .catch(error => {
+                    console.error('Lỗi khi thêm vào giỏ hàng :', error.response);
+                });
+        };
+    }
+
+    const handleAddToCartClick = (productId) => {
+        addToCart1(productId);
+    };
     return (
         <>
             <div id="carouselExampleIndicators" className="carousel slide">
@@ -160,14 +205,14 @@ export function Home() {
                     <span className="bg-secondary pr-3">Sản Phẩm</span>
                 </h2>
                 <div className="row px-xl-5">
-                    {product.map((value, index) => (
+                    {product?.slice(0, itemsToShow)?.map((value, index) => (
                         <div className="col-lg-3 col-md-4 col-sm-6 pb-1">
                             <div className="product-item bg-light mb-4">
                                 <div className="product-img position-relative overflow-hidden">
                                     <img className="img-fluid w-100"
                                          alt="" src={value.image}/>
                                     <div className="product-action">
-                                        <a className="btn btn-outline-dark btn-square">
+                                        <a className="btn btn-outline-dark btn-square" onClick={() => handleAddToCartClick(value.productId)}>
                                             <i className="bi bi-cart4"></i>
                                         </a>
                                         <a className="btn btn-outline-dark btn-square" >
