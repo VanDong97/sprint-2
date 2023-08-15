@@ -5,7 +5,7 @@ import com.example.be.model.product.Product;
 import java.util.List;
 
 public interface IProductService {
-    List<Product> showList();
+    List<Product> findAllByName(String search);
 
     List<Product> getProductByTypeProduct(Integer type);
 

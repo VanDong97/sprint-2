@@ -15,8 +15,8 @@ public class ProductService implements IProductService {
 
 
     @Override
-    public List<Product> showList() {
-        return iProductRepository.findByAll();
+    public List<Product> findAllByName(String search) {
+        return iProductRepository.findAllByProductName(search);
     }
 
     @Override

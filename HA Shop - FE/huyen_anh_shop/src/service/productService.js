@@ -36,6 +36,17 @@ export const findAllProduct = async () => {
     }
 };
 
+export const search = async (productName) => {
+    try {
+        const res = await axios.get(
+            `http://localhost:8080/api/?search=${productName}`
+        );
+        return res.data;
+    } catch (err) {
+        console.log(err);
+    }
+};
+
 export const findProductType = async () => {
     try {
         const result = await axios.get(

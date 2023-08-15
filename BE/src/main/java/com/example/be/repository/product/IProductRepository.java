@@ -12,8 +12,8 @@ import java.util.List;
 @Transactional
 public interface IProductRepository extends JpaRepository<Product, Integer> {
 
-    @Query(value = "select * from product ", nativeQuery = true)
-    List<Product> findByAll();
+    @Query(value = "select * from product where product_name like concat('%', :search ,'%')", nativeQuery = true)
+    List<Product> findAllByProductName(@Param("search") String search);
 
     @Query(value = "select * from product where product_type_id = :productTypeId" , nativeQuery = true)
     List<Product> getProductByType(@Param("productTypeId") Integer type);
