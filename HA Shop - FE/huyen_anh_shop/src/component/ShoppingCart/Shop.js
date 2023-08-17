@@ -82,19 +82,24 @@ export function Shop() {
             });
             navigate('/login')
         } else {
-            const apiUrl = `http://localhost:8080/api/cart/addToCart/${userId}/${productId}/${amount}`;
-            setIconQuantity(iconQuantity + 1)
-            axios.get(apiUrl)
+            const apiUrl = `http://localhost:8080/v2/cart/addToCart/${userId}/${productId}/${amount}`;
+            setIconQuantity(iconQuantity + 1);
+            const config = {
+                headers: {
+                    'Authorization': 'Bearer ' + sessionStorage.getItem("TOKEN"),
+                },
+            };
+            axios.get(apiUrl, config)
                 .then(response => {
                     Swal.fire({
-                        text: 'Thêm vào giỏ hàng thành công!',
+                        title: 'Thông báo ',
+                        text: 'Thêm vào giỏ hàng thành công ',
                         icon: 'success',
-                        confirmButtonText: 'OK',
-                        timer: 1500,
-                    })
+                        confirmButtonText: 'OK'
+                    });
                 })
                 .catch(error => {
-                    console.error('Lỗi khi thêm vào giỏ hàng :', error.response);
+                    console.error('Lỗi khi thêm vào gior hàng :', error.response);
                 });
         }
         ;

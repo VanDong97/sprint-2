@@ -4,14 +4,7 @@ export const findProductById = async (productId) => {
     console.log(productId)
     try {
         const result = await axios.get(
-            `http://localhost:8080/api/${productId}`,
-            {
-                headers:
-                    {
-                        'Authorization': 'Bearer ' + sessionStorage.getItem("TOKEN"),
-                    },
-            }
-        );
+            `http://localhost:8080/api/${productId}`);
         return result.data;
     } catch (e) {
         console.log(e);
@@ -20,16 +13,7 @@ export const findProductById = async (productId) => {
 
 export const findAllProduct = async () => {
     try {
-        const result = await axios.get(
-            `http://localhost:8080/api`,
-            {
-                headers:
-                    {
-                        'Authorization': 'Bearer ' + sessionStorage.getItem("TOKEN"),
-                    },
-            }
-
-        );
+        const result = await axios.get(`http://localhost:8080/api`);
         return result.data
     } catch (e) {
         console.log(e);
@@ -50,15 +34,7 @@ export const search = async (productName) => {
 export const findProductType = async () => {
     try {
         const result = await axios.get(
-            `http://localhost:8080/api/type`,
-            {
-                headers:
-                    {
-                        'Authorization': 'Bearer ' + sessionStorage.getItem("TOKEN"),
-                    }
-            }
-            )
-        ;
+            `http://localhost:8080/api/type`);
         return result.data;
     } catch (e) {
         console.log(e);
@@ -66,6 +42,6 @@ export const findProductType = async () => {
 };
 
 export const getAllProductByType = async (type) => {
-    const res = await axios.get(`http://localhost:8080/api/productByType/${type}`)
+    const res = await axios.get(`http://localhost:8080/api/productByType/${type}`);
     return res.data;
 }

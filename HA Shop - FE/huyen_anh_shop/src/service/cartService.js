@@ -2,7 +2,13 @@ import axios from 'axios';
 
 export const getAllCart = async (username) => {
     try {
-        const response = await axios.get(`http://localhost:8080/api/cart/${username}`
+        const response = await axios.get(`http://localhost:8080/v2/cart/${username}`,
+            {
+                headers:
+                    {
+                        'Authorization': 'Bearer ' + sessionStorage.getItem("TOKEN"),
+                    },
+            }
         );
 
         return response.data;
@@ -14,7 +20,13 @@ export const getAllCart = async (username) => {
 
 export const updateAmount = async (amount, cartDetailId) => {
     try {
-        const response = await axios.get(`http://localhost:8080/api/cart/updateAmount/${amount}/${cartDetailId}`);
+        const response = await axios.get(`http://localhost:8080/v2/cart/updateAmount/${amount}/${cartDetailId}`,
+            {
+                headers:
+                    {
+                        'Authorization': 'Bearer ' + sessionStorage.getItem("TOKEN"),
+                    },
+            });
         return response.data;
     } catch (error) {
         console.log(error)
@@ -23,7 +35,13 @@ export const updateAmount = async (amount, cartDetailId) => {
 
 export const deleteCartDetail = async (cartId, productId) => {
     try {
-        const response = await axios.delete(`http://localhost:8080/api/cart/deleteCartDetail/${cartId}/${productId}`);
+        const response = await axios.delete(`http://localhost:8080/v2/cart/deleteCartDetail/${cartId}/${productId}`,
+            {
+                headers:
+                    {
+                        'Authorization': 'Bearer ' + sessionStorage.getItem("TOKEN"),
+                    },
+            });
         return response.data;
     } catch (error) {
         console.log(error)
@@ -32,7 +50,13 @@ export const deleteCartDetail = async (cartId, productId) => {
 
 export const setCart = async (userId) => {
     try {
-        const response = await axios.get(`http://localhost:8080/api/cart/setCart/${userId}`);
+        const response = await axios.get(`http://localhost:8080/v2/cart/setCart/${userId}`,
+            {
+                headers:
+                    {
+                        'Authorization': 'Bearer ' + sessionStorage.getItem("TOKEN"),
+                    },
+            });
         return response.data;
     } catch (error) {
         console.log(error)
@@ -41,7 +65,13 @@ export const setCart = async (userId) => {
 
 export const setAmount = async (amount, productId) => {
     try {
-        const response = await axios.get(`http://localhost:8080/api/cart/setAmount/${amount}/${productId}`);
+        const response = await axios.get(`http://localhost:8080/v2/cart/setAmount/${amount}/${productId}`,
+            {
+                headers:
+                    {
+                        'Authorization': 'Bearer ' + sessionStorage.getItem("TOKEN"),
+                    },
+            });
         return response.data;
     } catch (error) {
         console.log(error)
@@ -50,7 +80,13 @@ export const setAmount = async (amount, productId) => {
 
 export const findAllHistory = async (userId) => {
     try {
-        const response = await axios.get(`http://localhost:8080/api/cart/history/${userId}`);
+        const response = await axios.get(`http://localhost:8080/v2/cart/history/${userId}`,
+            {
+                headers:
+                    {
+                        'Authorization': 'Bearer ' + sessionStorage.getItem("TOKEN"),
+                    },
+            });
         return response.data;
     } catch (error) {
         console.log(error)
@@ -60,7 +96,13 @@ export const findAllHistory = async (userId) => {
 
 export const saveHistory = async (userId, total) => {
     try {
-        const response = await axios.get(`http://localhost:8080/api/cart/save/${userId}/${total}`);
+        const response = await axios.get(`http://localhost:8080/v2/cart/save/${userId}/${total}`,
+            {
+                headers:
+                    {
+                        'Authorization': 'Bearer ' + sessionStorage.getItem("TOKEN"),
+                    },
+            });
         return response.data;
     } catch (error) {
         console.log(error)

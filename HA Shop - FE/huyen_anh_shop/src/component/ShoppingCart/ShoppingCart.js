@@ -75,26 +75,13 @@ export function ShoppingCart() {
         listCard();
     }, []);
     console.log(cart);
-
-    // if (!sessionStorage.getItem("roles")) {
-    //
-    //     Swal.fire({
-    //         title: 'Thông báo!',
-    //         text: `Đăng nhập để xem giỏ hàng`,
-    //         icon: 'error',
-    //         confirmButtonText: 'OK',
-    //     });
-    //     navigate("/login")
-    //     return null
-    //
-    // }
-
+    
     const deleteCartDetail = (image,cartId, productId, productName, cartDetailId) => {
         Swal.fire({
             imageUrl : image,
-            imageWidth: 400,
+            imageWidth: 450,
             imageHeight: 300,
-            text: "Bạn có muốn xóa sản phẩm này không ?",
+            html: `Bạn có muốn xóa sản phẩm <span style="color: red">${productName}</span> này không ?`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',

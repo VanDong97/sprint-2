@@ -1,6 +1,7 @@
 package com.example.be.controller;
 
 import com.example.be.dto.ICartDetailDto;
+import com.example.be.model.cart.Cart;
 import com.example.be.model.cart.CartDetail;
 import com.example.be.model.cart.PurchaseHistory;
 import com.example.be.model.product.Product;
@@ -20,11 +21,12 @@ import org.springframework.web.bind.annotation.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/api")
+@RequestMapping("v2")
 public class CartRestController {
     @Autowired
     private IProductService iProductService;
@@ -37,6 +39,9 @@ public class CartRestController {
 
     @Autowired
     private IPurchaseService iPurchaseService;
+
+    @Autowired
+    private ICartService iCartService;
 
     @GetMapping("/cart/{username}")
     public ResponseEntity<?> findAllCartDetail(@PathVariable String username) {
@@ -100,5 +105,42 @@ public class CartRestController {
             iCartDetailService.save(cartDetail);
         }
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @GetMapping("/cart/addToCart/{userId}/{productId}/{amount}")
+    public ResponseEntity<?> addToCart(@PathVariable Integer userId,
+                                       @PathVariable Integer productId,
+                                       @PathVariable Integer amount,
+                                       String username) {
+
+        List<ICartDetailDto> cartDetailDtoList = iCartDetailService.findAll(username);
+        for (ICartDetailDto cartDetailDto : cartDetailDtoList) {
+            if (Objects.equals(cartDetailDto.getProductId(), productId)) {
+                CartDetail cartDetail = iCartDetailService.findByCartDetailId(cartDetailDto.getCartDetailId());
+                Integer amount1 = cartDetail.getAmount() + amount;
+                if (amount1 > cartDetailDto.getAmountt()) {
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                } else {
+                    cartDetail.setAmount(amount1);
+                    iCartDetailService.save(cartDetail);
+                    return new ResponseEntity<>(cartDetail, HttpStatus.OK);
+                }
+            }
+        }
+
+        User user = iUserService.findById(userId);
+        Date date = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String dateNow = dateFormat.format(date);
+        Cart cart = new Cart();
+        cart.setDate(dateNow);
+        cart.setUser(user);
+        iCartService.save(cart);
+        CartDetail cartDetail = new CartDetail();
+        cartDetail.setCart(cart);
+        Product product = iProductService.findById(productId);
+        cartDetail.setProduct(product);
+        cartDetail.setAmount(amount);
+        CartDetail cartDetail1 = iCartDetailService.save(cartDetail);
+        return new ResponseEntity<>(cartDetail1, HttpStatus.CREATED);
     }
 }
