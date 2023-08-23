@@ -30,23 +30,21 @@ public class SecurityController {
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody @Valid LoginRequest loginRequest) {
-        // Tạo một đối tượng UsernamePasswordAuthenticationToken với username
-        // và password được truyền vào từ yêu cầu đăng nhập.
+
+        // Đăng nhâpj username với password .
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
 
-        // Gọi phương thức authenticate của đối tượng authenticationManager với
-        // usernamePasswordAuthenticationToken làm tham số để xác thực đăng nhập.
+        // Xác thực tài khoản , nếu sai có Exception
         Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
 
-        // Lưu trữ kết quả xác thực vào SecurityContextHolder để giữ thông tin xác thực của người dùng.
+        // Lưu trữ kết quả , thông tin đã xác thực của người dùng.
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         // Tạo một chuỗi JWT để trả về cho người dùng sau khi xác thực thành công.
         String jwt = jwtUtility.generateJwtToken(loginRequest.getUsername());
 
 
-        // Lấy thông tin chi tiết về tài khoản người dùng từ SecurityContextHolder, ở đây lấy username
-        // và lấy danh sách quyền truy cập (roles) từ đối tượng userDetails.
+        // Lấy thông tin chi tiết của tài khoản , vd như ROlE gì .
         AccountDetails userDetails = (AccountDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         // Trả về một đối tượng JwtResponse chứa chuỗi JWT, thông tin tài khoản người dùng và danh sách quyền truy cập.

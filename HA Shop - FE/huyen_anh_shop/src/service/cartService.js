@@ -13,23 +13,7 @@ export const getAllCart = async (username) => {
 
         return response.data;
     } catch (error) {
-        console.log(error)
-    }
-};
 
-
-export const updateAmount = async (amount, cartDetailId) => {
-    try {
-        const response = await axios.get(`http://localhost:8080/v2/cart/updateAmount/${amount}/${cartDetailId}`,
-            {
-                headers:
-                    {
-                        'Authorization': 'Bearer ' + sessionStorage.getItem("TOKEN"),
-                    },
-            });
-        return response.data;
-    } catch (error) {
-        console.log(error)
     }
 };
 
@@ -63,20 +47,6 @@ export const setCart = async (userId) => {
     }
 };
 
-export const setAmount = async (amount, productId) => {
-    try {
-        const response = await axios.get(`http://localhost:8080/v2/cart/setAmount/${amount}/${productId}`,
-            {
-                headers:
-                    {
-                        'Authorization': 'Bearer ' + sessionStorage.getItem("TOKEN"),
-                    },
-            });
-        return response.data;
-    } catch (error) {
-        console.log(error)
-    }
-};
 
 export const findAllHistory = async (userId) => {
     try {
@@ -91,7 +61,7 @@ export const findAllHistory = async (userId) => {
     } catch (error) {
         console.log(error)
     }
-};
+}
 
 
 export const saveHistory = async (userId, total) => {

@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 export const findUserName = async (username) => {
     try {
         const response = await fetch(`http://localhost:8080/api/user/${username}`);

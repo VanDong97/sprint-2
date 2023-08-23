@@ -1,11 +1,10 @@
-import {Link} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import * as Swal from "sweetalert2";
 import {useNavigate, useParams} from "react-router";
 import * as UserService from "../../service/userService";
 import * as CartService from "../../service/cartService";
 import * as productService from "../../service/productService";
-import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
+import {PayPalScriptProvider, PayPalButtons} from '@paypal/react-paypal-js';
 
 export function ShoppingCart() {
 
@@ -13,10 +12,20 @@ export function ShoppingCart() {
     const [cart, setCart] = useState([]);
     const username = sessionStorage.getItem('USERNAME');
     const navigate = useNavigate();
-    const param = useParams();
     const [product, setProduct] = useState([]);
     const [productQuantities, setProductQuantities] = useState({});
+    const [history, setHistory] = useState([]);
 
+    const getHistory = async () => {
+        try {
+            const rs = await CartService.findAllHistory(userId);
+            setHistory(rs);
+
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    getHistory();
 
     useEffect(() => {
         document.title = "Giỏ hàng"; // Thay đổi title
@@ -37,7 +46,6 @@ export function ShoppingCart() {
         }
         getUserName();
     }, []);
-    console.log(userId)
 
     const calculateTotalSum = () => {
         let totalSum = 0;
@@ -74,11 +82,10 @@ export function ShoppingCart() {
         }
         listCard();
     }, []);
-    console.log(cart);
-    
-    const deleteCartDetail = (image,cartId, productId, productName, cartDetailId) => {
+
+    const deleteCartDetail = (image, cartId, productId, productName, cartDetailId) => {
         Swal.fire({
-            imageUrl : image,
+            imageUrl: image,
             imageWidth: 450,
             imageHeight: 300,
             html: `Bạn có muốn xóa sản phẩm <span style="color: red">${productName}</span> này không ?`,
@@ -87,15 +94,16 @@ export function ShoppingCart() {
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
             confirmButtonText: 'Xóa',
-            cancelButtonText : "Không"
+            cancelButtonText: "Không"
         }).then((result) => {
             if (result.isConfirmed) {
                 CartService.deleteCartDetail(cartId, productId).then(() => {
                     setCart((prevCart) => prevCart.filter((item) => item.cartDetailId !== cartDetailId));
                 });
                 Swal.fire({
-                    icon : 'success',
-                    text : 'Xóa thành công !'
+                    icon: 'success',
+                    text: 'Xóa thành công !',
+                    timer: 1500
                 })
             }
         })
@@ -129,7 +137,7 @@ export function ShoppingCart() {
                                 </tr>
                                 </thead>
                                 <tbody className="align-middle">
-                                {cart?.map((item , index) =>(
+                                {cart?.map((item, index) => (
                                     <tr>
                                         <td className="align-middle" key={index}>
                                             <img style={{width: 50}} src={item?.image}/>
@@ -147,7 +155,8 @@ export function ShoppingCart() {
                                                 style={{width: 100}}
                                             >
                                                 <div className="input-group-btn">
-                                                    <button className="btn btn-sm btn-primary btn-minus" onClick={() => decreaseQuantity(item.productId)}>
+                                                    <button className="btn btn-sm btn-primary btn-minus"
+                                                            onClick={() => decreaseQuantity(item.productId)}>
                                                         <i className="bi bi-dash-lg pe-1 ps-1"></i>
                                                     </button>
                                                 </div>
@@ -158,7 +167,8 @@ export function ShoppingCart() {
                                                     value={productQuantities[item.productId]}
                                                 />
                                                 <div className="input-group-btn">
-                                                    <button className="btn btn-sm btn-primary btn-plus" onClick={() => increaseQuantity(item.productId)}>
+                                                    <button className="btn btn-sm btn-primary btn-plus"
+                                                            onClick={() => increaseQuantity(item.productId)}>
                                                         <i className="bi bi-plus-lg text-white pe-1 ps-1"></i>
                                                     </button>
                                                 </div>
@@ -168,7 +178,8 @@ export function ShoppingCart() {
                                             {Intl.NumberFormat().format(item.price * (productQuantities[item.productId] || item.amount))} VND
                                         </td>
                                         <td className="align-middle">
-                                            <a onClick={() => deleteCartDetail(item?.image,item.cartId, item.productId, item.productName, item.cartDetailId)} className="btn btn-sm btn-danger">
+                                            <a onClick={() => deleteCartDetail(item?.image, item.cartId, item.productId, item.productName, item.cartDetailId)}
+                                               className="btn btn-sm btn-danger">
                                                 <i className="bi bi-x-circle"></i>
                                             </a>
                                         </td>
@@ -198,41 +209,43 @@ export function ShoppingCart() {
                                     <h5>Tổng Tiền</h5>
                                     <h5>{calculateTotalSum().toLocaleString()} VND</h5>
                                 </div>
-                                <PayPalScriptProvider>
-                                    <PayPalButtons
-                                        createOrder={(data, actions) => {
-                                            return actions.order.create({
-                                                purchase_units: [
-                                                    {
-                                                        amount: {
-                                                            value: calculateTotalSum(),
-                                                        },
-                                                    },
-                                                ],
-                                            });
-                                        }}
-                                        onApprove={(data, actions) => {
-                                            return actions.order.capture().then(function () {
-                                                Swal.fire({
-                                                    icon: 'success',
-                                                    title: 'Thanh toán thành công',
-                                                    showConfirmButton: false,
-                                                    timer: 1000,
-                                                });
-                                                navigate('/history')
-                                                const totalAmount = calculateTotalSum() + 30000;
-                                                CartService.saveHistory(userId, totalAmount).then(() => {
-                                                    // Clear the cart after successful payment and saving the history
-                                                    CartService.setCart(userId).then((updatedCartData) => {
-                                                        setCart(updatedCartData);
-                                                    });
-                                                });
-                                            });
-                                        }}
-                                    />
-                                </PayPalScriptProvider>
                             </div>
                         </div>
+                        <PayPalScriptProvider>
+                            <PayPalButtons
+                                createOrder={(data, actions) => {
+                                    return actions.order.create({
+                                        purchase_units: [
+                                            {
+                                                amount: {
+                                                    value: (calculateTotalSum() / 24000).toString().slice(0, 4),
+                                                    currency_code: 'USD'
+                                                },
+                                            },
+                                        ],
+                                    });
+                                }}
+                                onApprove={(data, actions) => {
+                                    return actions.order.capture().then(function () {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Thanh toán thành công',
+                                            showConfirmButton: false,
+                                            timer: 1300,
+                                        });
+                                        const totalAmount = calculateTotalSum() + 30000;
+                                        CartService.saveHistory(userId, totalAmount).then(() => {
+                                            // Clear the cart after successful payment and saving the history
+                                            CartService.setCart(userId).then((updatedCartData) => {
+                                                setCart(updatedCartData);
+                                            });
+                                        });
+                                        getHistory();
+                                        navigate('/history');
+                                    });
+                                }}
+                            />
+                        </PayPalScriptProvider>
                     </div>
                 </div>
             </div>

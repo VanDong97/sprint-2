@@ -3,6 +3,7 @@ import {useNavigate} from "react-router";
 import * as UserService from "../../service/userService";
 import * as CartService from "../../service/cartService";
 import * as Swal from "sweetalert2";
+import {Link} from "react-router-dom";
 
 export function History() {
     const [userId, setUserId] = useState(0);
@@ -35,7 +36,6 @@ export function History() {
 
         getHistory();
     }, [userId]);
-console.log(history)
     if (!sessionStorage.getItem("roles")) {
 
         Swal.fire({
@@ -89,7 +89,7 @@ console.log(history)
                                     <td>{order.user.username}</td>
                                     <td>{order.orderDate}</td>
                                     <td style={{ fontFamily: "Cabin" }}>
-                                        {new Intl.NumberFormat().format(order.total)}VNĐ
+                                        {new Intl.NumberFormat().format(order.total)} VNĐ
                                     </td>
                                 </tr>
                             ))}

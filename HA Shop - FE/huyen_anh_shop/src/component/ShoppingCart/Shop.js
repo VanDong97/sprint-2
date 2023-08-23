@@ -1,7 +1,7 @@
 import "../Home/home.css";
 import React, {useContext, useEffect, useState} from "react";
 import {Field, Form, Formik} from "formik";
-import {Link} from "react-router-dom";
+import {Link,NavLink} from "react-router-dom";
 import {useNavigate} from "react-router";
 import * as UserService from "../../service/userService";
 import {QuantityContext} from "./QuantityContext";
@@ -9,6 +9,7 @@ import * as Swal from "sweetalert2";
 import axios from "axios";
 import * as productService from "../../service/productService";
 import {search} from "../../service/productService";
+
 
 export function Shop() {
 
@@ -95,11 +96,12 @@ export function Shop() {
                         title: 'Thông báo ',
                         text: 'Thêm vào giỏ hàng thành công ',
                         icon: 'success',
-                        confirmButtonText: 'OK'
+                        confirmButtonText: 'OK',
+                        timer : 1500
                     });
                 })
                 .catch(error => {
-                    console.error('Lỗi khi thêm vào gior hàng :', error.response);
+                    console.error('Lỗi khi thêm vào giỏ hàng :', error.response);
                 });
         }
         ;

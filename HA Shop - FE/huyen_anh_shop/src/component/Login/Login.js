@@ -4,20 +4,22 @@ import {ErrorMessage, Field, Form, Formik} from "formik";
 import * as Yup from "yup";
 import {useNavigate} from "react-router";
 import {postLogin} from "../../service/Service";
-import * as Swal from "sweetalert2";
 
 export function Login() {
     const navigate = useNavigate();
     const [failedAccount, setFailedAccount] = useState(null);
+    const [username, setUsername] = useState(sessionStorage.getItem("USERNAME"));
+
 
     useEffect(() => {
         document.title = "Đăng nhập"; // Thay đổi title
     }, []);
 
-    if (sessionStorage.getItem("TOKEN")) {
-        navigate('/');
-        return null;
-    }
+    useEffect(() => {
+        if (username){
+            navigate("/")
+        }
+    })
     return (
         <>
             <Formik
@@ -68,29 +70,29 @@ export function Login() {
                                                 </div>
                                                 <Form>
                                                     <div className="form-outline mb-4">
+                                                        <label className="form-label" htmlFor="form2Example11">
+                                                            Tên đăng nhập
+                                                        </label>
                                                         <Field
                                                             type="email"
                                                             id="form2Example11"
                                                             className="form-control"
-                                                            placeholder="Số điện thoại hoặc Email"
+                                                            placeholder="Số điện thoại hoặc email"
                                                             name="username"
                                                         />
-                                                        <label className="form-label" htmlFor="form2Example11">
-                                                            Tên đăng nhập
-                                                        </label>
                                                         <ErrorMessage name="username" className="text-danger col-12"
                                                                       component="span"/>
                                                     </div>
                                                     <div className="form-outline mb-4">
+                                                        <label className="form-label" htmlFor="form2Example22">
+                                                            Mật khẩu
+                                                        </label>
                                                         <Field
                                                             type="password"
                                                             id="form2Example22"
                                                             className="form-control"
                                                             name="password"
                                                         />
-                                                        <label className="form-label" htmlFor="form2Example22">
-                                                            Mật khẩu
-                                                        </label>
                                                         <ErrorMessage name="password" className="text-danger col-12"
                                                                       component="span"/>
                                                                       <div>

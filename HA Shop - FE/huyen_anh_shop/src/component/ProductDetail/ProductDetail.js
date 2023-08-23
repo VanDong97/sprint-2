@@ -1,4 +1,4 @@
-import {Link} from "react-router-dom";
+import {Link, NavLink} from "react-router-dom";
 import React, {useContext, useEffect, useState} from "react";
 import * as productService from "../../service/productService";
 import {useNavigate, useParams} from "react-router";
@@ -61,9 +61,14 @@ export function ProductDetail() {
             });
             navigate('/login')
         }else{
-            const apiUrl = `http://localhost:8080/api/cart/addToCart/${userId}/${productId}/${amount}`;
+            const apiUrl = `http://localhost:8080/v2/cart/addToCart/${userId}/${productId}/${amount}`;
             setIconQuantity(iconQuantity + 1)
-            axios.get(apiUrl)
+            const config = {
+                headers: {
+                    'Authorization': 'Bearer ' + sessionStorage.getItem("TOKEN"),
+                },
+            };
+            axios.get(apiUrl,config)
                 .then(response => {
                     Swal.fire({
                         text: 'Thêm vào giỏ hàng thành công!',
@@ -128,7 +133,7 @@ export function ProductDetail() {
                                     >
                                         Thêm vào giỏ hàng
                                     </a>
-                                    <Link to="/"
+                                    <Link to="/shop"
                                         className="btn btn-success rounded-pill">
                                         Quay lại
                                     </Link>
@@ -159,7 +164,7 @@ export function ProductDetail() {
             </div>
             <div>
                 <div className="row px-xl-5">
-                    <h4 className="section-title position-relative  mx-xl-5 mb-4">
+                    <h4 className=" position-relative  mx-xl-5 mb-4">
                         <span className="bg-secondary pr-3">Sản phẩm liên quan</span>
                     </h4>
                     {product1?.slice(0, itemsToShow)?.map((value, index) => (
@@ -172,17 +177,13 @@ export function ProductDetail() {
                                         <a className="btn btn-outline-dark btn-square" onClick={() => handleAddToCartClick(product.productId)}>
                                             <i className="bi bi-cart4"></i>
                                         </a>
-                                        <a className="btn btn-outline-dark btn-square" >
-                                            <Link to={`/detail/${value.productId}`}>
-                                                <i
-                                                    className="bi bi-info-square"
-                                                />
-                                            </Link>
-                                        </a>
+                                        <Link to={`/detail/${value.productId}`} className="btn btn-outline-dark btn-square">
+                                                <i className="bi bi-info-square" onClick={() => {window.scrollTo(0, 0)}} />
+                                        </Link>
                                     </div>
                                 </div>
                                 <div className="text-center py-4">
-                                    <a className="h6 text-decoration-none text-truncate" href="">
+                                    <a className="h6 text-decoration-none text-truncate">
                                         {value.productName}
                                     </a>
                                     <div className="d-flex align-items-center justify-content-center mt-2">

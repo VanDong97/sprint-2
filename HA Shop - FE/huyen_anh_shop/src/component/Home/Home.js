@@ -47,11 +47,16 @@ export function Home() {
                 showConfirmButton: false,
                 timer: 1500
             });
-            navigate('/api/login')
+            navigate('/login')
         }else{
-            const apiUrl = `http://localhost:8080/api/cart/addToCart/${userId}/${productId}/${amount}`;
+            const apiUrl = `http://localhost:8080/v2/cart/addToCart/${userId}/${productId}/${amount}`;
             setIconQuantity(iconQuantity + 1)
-            axios.get(apiUrl)
+            const config = {
+                headers: {
+                    'Authorization': 'Bearer ' + sessionStorage.getItem("TOKEN"),
+                },
+            };
+            axios.get(apiUrl,config)
                 .then(response => {
                     Swal.fire({
                         text: 'Thêm vào giỏ hàng thành công!',
@@ -111,11 +116,11 @@ export function Home() {
                             className="d-block w-100" alt="..."/>
                     </div>
                     <div className="carousel-item">
-                        <img src="https://glab.vn/storage/uploads/advert/6448f45698c3e.jpg" className="d-block w-100"
+                        <img src="https://glab.vn/storage/uploads/advert/6448f45698c3e.jpg" 
                              alt="..."/>
                     </div>
                     <div className="carousel-item">
-                        <img src="https://cdn-img.thethao247.vn/upload/thanhtung/2020/02/05/best-selling-shoes-2019-2.jpg" className="d-block w-100"
+                        <img src="https://cdn-img.thethao247.vn/upload/thanhtung/2020/02/05/best-selling-shoes-2019-2.jpg"
                              alt="..."/>
                     </div>
                 </div>
@@ -217,9 +222,7 @@ export function Home() {
                                         </a>
                                         <a className="btn btn-outline-dark btn-square" >
                                             <Link to={`/detail/${value.productId}`}>
-                                                <i
-                                                    className="bi bi-info-square"
-                                                />
+                                                <i className="bi bi-exclamation-square" onClick={() => {window.scrollTo(0, 0)}}></i>
                                             </Link>
                                         </a>
                                     </div>
@@ -250,9 +253,9 @@ export function Home() {
                             <div className="offer-text">
                                 <h6 className="text-white text-uppercase">Tiết kiệm 20%</h6>
                                 <h3 className="text-white mb-3">Khuyến mãi đặc biệt</h3>
-                                <a href="" className="btn btn-primary">
+                                <Link to="/shop" className="btn btn-primary">
                                     Mua ngay
-                                </a>
+                                </Link>
                             </div>
                         </div>
                     </div>
@@ -264,9 +267,9 @@ export function Home() {
                             <div className="offer-text">
                                 <h6 className="text-white text-uppercase">Tiết kiệm 20%</h6>
                                 <h3 className="text-white mb-3">Khuyến mãi đặc biệt</h3>
-                                <a href="" className="btn btn-primary">
+                                <Link to="/shop" className="btn btn-primary">
                                     Mua ngay
-                                </a>
+                                </Link>
                             </div>
                         </div>
                     </div>

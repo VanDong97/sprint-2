@@ -54,14 +54,14 @@ export const Header = () => {
             {sessionStorage.getItem("roles") === "ADMIN" && (
             <nav id="header-nav" className="navbar navbar-expand-lg px-3 mb-3">
                 <div className="container-lg">
-                    <a className="navbar-brand" href="/">
+                    <Link className="navbar-brand" to="/">
                         <img
                             src="/hashop.png"
                             width="150px"
                             height="80px"
                             style={{marginRight: "50px"}}
                         />
-                    </a>
+                    </Link>
                     <button
                         className="navbar-toggler d-flex d-lg-none order-3 p-2"
                         type="button"
@@ -109,6 +109,14 @@ export const Header = () => {
                                 >
                                     Nhân Viên
                                 </Link>
+                            </li>
+                            <li className="nav-item">
+                                <a href="/history"
+                                      className="nav-link me-5"
+                                      style={{fontSize: 20}}
+                                >
+                                    Lịch sử
+                                </a>
                             </li>
 
                             <li className="nav-item">
@@ -158,14 +166,14 @@ export const Header = () => {
                 sessionStorage.getItem("roles") === "USER" && (
                 <nav id="header-nav" className="navbar navbar-expand-lg px-3 mb-3">
                     <div className="container-lg">
-                        <a className="navbar-brand" href="/">
+                        <Link className="navbar-brand" to="/">
                             <img
                                 src="/hashop.png"
                                 width="150px"
                                 height="80px"
                                 style={{marginRight: "50px"}}
                             />
-                        </a>
+                        </Link>
                         <button
                             className="navbar-toggler d-flex d-lg-none order-3 p-2"
                             type="button"
@@ -207,12 +215,12 @@ export const Header = () => {
                                     </Link>
                                 </li>
                                 <li className="nav-item">
-                                    <Link to="/history"
+                                    <a href="/history"
                                           className="nav-link me-5"
                                           style={{fontSize: 20}}
                                     >
                                         Lịch sử
-                                    </Link>
+                                    </a>
                                 </li>
 
                                 <li className="nav-item">
@@ -261,14 +269,14 @@ export const Header = () => {
                 !sessionStorage.getItem("TOKEN") && (
                     <nav id="header-nav" className="navbar navbar-expand-lg px-3 mb-3">
                         <div className="container-lg">
-                            <a className="navbar-brand" href="/">
+                            <Link className="navbar-brand" to="/">
                                 <img
                                     src="/hashop.png"
                                     width="150px"
                                     height="80px"
                                     style={{marginRight: "50px"}}
                                 />
-                            </a>
+                            </Link>
                             <button
                                 className="navbar-toggler d-flex d-lg-none order-3 p-2"
                                 type="button"
